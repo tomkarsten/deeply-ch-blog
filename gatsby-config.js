@@ -1,14 +1,14 @@
 module.exports = {
   siteMetadata: {
-    title: `Gatsby Starter Blog`,
+    title: `deeply.ch`,
     author: {
-      name: `Kyle Mathews`,
-      summary: `who lives and works in San Francisco building useful things.`,
+      name: `Thomas Karsten`,
+      summary: `who lives and works in Zurich, Switzerland.`,
     },
-    description: `A starter blog demonstrating what Gatsby can do.`,
-    siteUrl: `https://gatsbystarterblogsource.gatsbyjs.io/`,
+    description: `deeply.ch blog.`,
+    siteUrl: `https://https://deeplychblog.gatsbyjs.io/`,
     social: {
-      twitter: `kylemathews`,
+      twitter: `tomkarsten_ch`,
     },
   },
   plugins: [
