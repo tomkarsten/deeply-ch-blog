@@ -7,4 +7,7 @@ import "./src/normalize.css"
 import "./src/style.css"
 
 // Highlighting for code blocks
-import "prismjs/themes/prism-okaidia.css"
+import "prismjs/themes/prism.css"
+
+// LaTex support
+import "katex/dist/katex.min.css"

@@ -3648,7 +3648,7 @@
   "resolved" "https://registry.npmjs.org/command-exists/-/command-exists-1.2.9.tgz"
   "version" "1.2.9"
 
-"commander@^2.20.0", "commander@^2.20.3", "commander@^2.8.1":
+"commander@^2.19.0", "commander@^2.20.0", "commander@^2.20.3", "commander@^2.8.1":
   "integrity" "sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ=="
   "resolved" "https://registry.npmjs.org/commander/-/commander-2.20.3.tgz"
   "version" "2.20.3"
@@ -6276,6 +6276,15 @@
     "unist-util-select" "^1.5.0"
     "unist-util-visit-parents" "^2.1.2"
 
+"gatsby-remark-katex@^4.1.0":
+  "integrity" "sha512-YCOk3DYa83H0c7TRi93Vza5aae8KbuM2pWNhENKeXMA5L9bCWji+uLf85jEPesNpg/FSLdkyi/b71T+BYBeVPw=="
+  "resolved" "https://registry.npmjs.org/gatsby-remark-katex/-/gatsby-remark-katex-4.1.0.tgz"
+  "version" "4.1.0"
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+    "remark-math" "^1.0.6"
+    "unist-util-visit" "^1.4.1"
+
 "gatsby-remark-prismjs@^4.1.0":
   "integrity" "sha512-/3MOQIMVR/n8gs6zdF5OZ9EjCVkyQG7S65gX/C8rd3jiOaoWo1E6ENcn6ePb9/rWWZpFtaRu4MNpR/CRDdOsWg=="
   "resolved" "https://registry.npmjs.org/gatsby-remark-prismjs/-/gatsby-remark-prismjs-4.1.0.tgz"
@@ -6385,7 +6394,7 @@
     "semver" "^7.3.4"
     "sharp" "^0.27.0"
 
-"gatsby@^3.1.1":
+"gatsby@^3.0.0-next.0", "gatsby@^3.1.1":
   "integrity" "sha512-rn5M+Hc2RlJnwU8rHQ/5ZQ5VVJFRHt1iFq+A2AogSITYL538/FU7+94K3TWYexc5VJgfOptXo3eg4RCOpOTFHg=="
   "resolved" "https://registry.npmjs.org/gatsby/-/gatsby-3.1.1.tgz"
   "version" "3.1.1"
@@ -8436,6 +8445,13 @@
   "integrity" "sha512-pBxcB3LFc8QVgdggvZWyeys+hnrNWg4OcZIU/1X59k5jQdLBlCsYGRQaz234SqoRLTCgMH00fY0xRJH+F9METQ=="
   "resolved" "https://registry.npmjs.org/junk/-/junk-3.1.0.tgz"
   "version" "3.1.0"
+
+"katex@^0.10.0", "katex@^0.10.2":
+  "integrity" "sha512-cQOmyIRoMloCoSIOZ1+gEwsksdJZ1EW4SWm3QzxSza/QsnZr6D4U1V9S4q+B/OLm2OQ8TCBecQ8MaIfnScI7cw=="
+  "resolved" "https://registry.npmjs.org/katex/-/katex-0.10.2.tgz"
+  "version" "0.10.2"
+  dependencies:
+    "commander" "^2.19.0"
 
 "kebab-hash@^0.1.2":
   "integrity" "sha512-BTZpq3xgISmQmAVzkISy4eUutsUA7s4IEFlCwOBJjvSFOwyR7I+fza+tBc/rzYWK/NrmFHjfU1IhO3lu29Ib/w=="
@@ -11563,6 +11579,13 @@
   dependencies:
     "jsesc" "~0.5.0"
 
+"remark-math@^1.0.6":
+  "integrity" "sha512-I43wU/QOQpXvVFXKjA4FHp5xptK65+5F6yolm8+69/JV0EqSOB64wURUZ3JK50JtnTL8FvwLiH2PZ+fvsBxviA=="
+  "resolved" "https://registry.npmjs.org/remark-math/-/remark-math-1.0.6.tgz"
+  "version" "1.0.6"
+  dependencies:
+    "trim-trailing-lines" "^1.1.0"
+
 "remark-mdx@^2.0.0-next.4":
   "integrity" "sha512-I5dCKP5VE18SMd5ycIeeEk8Hl6oaldUY6PIvjrfm65l7d0QRnLqknb62O2g3QEmOxCswcHTtwITtz6rfUIVs+A=="
   "resolved" "https://registry.npmjs.org/remark-mdx/-/remark-mdx-2.0.0-next.9.tgz"
@@ -11583,7 +11606,7 @@
     "@babel/plugin-syntax-jsx" "7.10.4"
     "@mdx-js/util" "^2.0.0-next.8"
 
-"remark-parse@^6.0.0", "remark-parse@^6.0.3":
+"remark-parse@^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0", "remark-parse@^6.0.0", "remark-parse@^6.0.3":
   "integrity" "sha512-QbDXWN4HfKTUC0hHa4teU463KclLAnwpn/FBn87j9cKYJWWawbiLgMfP2Q4XwhxxuuuOxHlw+pSN0OKuJwyVvg=="
   "resolved" "https://registry.npmjs.org/remark-parse/-/remark-parse-6.0.3.tgz"
   "version" "6.0.3"
@@ -13291,7 +13314,7 @@
   dependencies:
     "escape-string-regexp" "^1.0.2"
 
-"trim-trailing-lines@^1.0.0":
+"trim-trailing-lines@^1.0.0", "trim-trailing-lines@^1.1.0":
   "integrity" "sha512-rjUWSqnfTNrjbB9NQWfPMH/xRK1deHeGsHoVfpxJ++XeYXE0d6B1En37AHfw3jtfTU7dzMzZL2jjpe8Qb5gLIQ=="
   "resolved" "https://registry.npmjs.org/trim-trailing-lines/-/trim-trailing-lines-1.1.4.tgz"
   "version" "1.1.4"
