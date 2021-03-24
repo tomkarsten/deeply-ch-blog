@@ -116,9 +116,9 @@ while loss(x,w,y)>0.1:
 ```
 
 What we have seen so far are the key ingredients for almost any (supervised) deep learning solution, namely:
-- **model** transforms input data into predictions, 
-- **loss** measures whether the model did a good job,
-- **optimization** changes model parameters to deliver better results.
+- **model** which transforms input data into predictions, 
+- **loss** which measures whether the model did a good job,
+- **optimization** which changes model parameters to deliver better results.
 
 ![black box](./deeplych-dl-overview.png)
 
