@@ -1,5 +1,5 @@
 ---
-title: Deep Learning Fundamentals I - Learning from Data 
+title: Deep Learning Fundamentals - Learning from Data 
 tags: ["deep learning"]
 date: "2021-03-22"
 ---
@@ -21,8 +21,7 @@ To understand the mechanics, we start our exploration with some somewhat simplis
 | 7      | 14     |
 | 10     | 20     |
 
-Our **goal** (or task) is to come up with an operation $f$ which would produce correct output from any given input e.g. $f(4)=8$. For this particular example, there is an visible pattern between input and output, which can be expressed as $output=w*input$, where $w=2$. But for more complicated examples the solution is not always that obvious. We need is a more systematic approach how to derive the relationship between input and output. 
-
+Our **goal** (or task) is to come up with an operation $f$ which would produce correct output from any given input e.g. $f(4)=8$. For this particular example, there is a visible pattern between input and output, which can be expressed as $output=w*input$, where $w=2$. But the solution is not always that obvious. Thus, we need is a more systematic approach how to derive the relationship between input and output. 
 
 ```python
 def f(input):
@@ -30,7 +29,7 @@ def f(input):
     # return result of the operation
 ```
 
-As we initially don't know what the $f$ is we start with a random guess that $w=3$ and thus $output=3*input$:  
+How to approach it? Well, as we initially don't know what the $f$ is, we start with a random guess. Let's say $w=3$ and thus $output=3*input$:  
 
 ```python
 w = 3
