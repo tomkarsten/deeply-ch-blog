@@ -35,14 +35,14 @@ Sounds a bit more complicated than it is. To make the backpropagation algorithm 
 
 
 ![](backpropagation_comp_graph.png)
-Let's a with very simple data transformation $3x^2+5$ where the transformation of input $x$ can be visualized as a series of steps in a computational graph. The first step is multiplying input by 3: $3*x$, then applying $(..)^2$ and adding $5$ to the final result.
+Let's a with very simple data transformation $(3x)^2+5$ where the transformation of input $x$ can be visualized as a series of steps in a computational graph. The first step is multiplying input by 3: $3*x$, then applying $(..)^2$ and adding $5$ to the final result.
 
 ![](backpropagation_forward_pass1.png)
-To see how the computational graph in motion we use data input $x=2$ as an example. Passing the input through the data transformation yields $41$.
+To see the computational graph in motion we use data input $x=2$ as an example. Passing the input through to the end of the computational graph yields $41$.
 ![](backpropagation_forward_pass2.png)
-But that is not the only thing we do when moving down the graph. For every data transformation (in our case three in total) we save additional information about the *rate of change*. Rate of change is just another name for how fast the outcome of an operation is responding to an unit of input. Let's take an example: if the data transformation is $3x$, where $x$ is the input, then obviously, for every unit $x=1$ the change is: $3*1=3$. Let's make a note $x$ an move to the next step. The rate of change for $x^2$ is $2*x$ and for the last step $x+5$ it is just $1$. 
+Before we move on there is an additional step to. For every data transformation (in our case three in total) we save additional information about the *rate of change*. Rate of change is just another name for *how fast the outcome of an operation is responding to an unit of input*. Let's take an example: if the data transformation is $3x$, where $x$ is the input, then for every unit $x=1$ the change is: $3*1=3$. We keep this as additional information in our graph and move to the next step. The rate of change for $x^2$ is $2*x$ and for the last step $x+5$ it is just $1$. 
 ![](backpropagation_backward_pass.png)
-The last phase, so called *backward pass* is where are all our previous efforts are starting bearing fruits. We just start with the last operation's *rate of change* and move up the graph by multiplying it all intermediate results.
+Now, after being done with the *forward phase*, we run so called *backward pass* where all our previous efforts are starting bearing fruits. We begin backward pass with the last operation's *rate of change* and move up the graph by multiplying all intermediate results from the forward pass.
 
 ### Backpropagation using pseudocode
 
@@ -57,7 +57,7 @@ def g(x):
 def h(x):
     return x+5
 ```
-
+We start by defining data transformations as simple functions.
 ```python
 # define composite function
 def hgf(x):
@@ -66,6 +66,7 @@ def hgf(x):
     x3 = h(x2)
     return x3
 ```
+Next, we stack individual functions into one function.
 
 ```python
 # define derivatives for each individual function
@@ -79,24 +80,33 @@ def grad_h(x):
     return 1
 ```
 
+Each individual function has a shadow *rate of change* function. 
+
 ```python
 # define derivatives for the compsite function
 def grad_hgf(x):
     x1 = f(x)
     x2 = g(x1)
     return grad_h(x2)*grad_g(x1)*grad_f(x)
-```
 
+grad_hgf(2) 
+# 36
+```
+For the composite function, *the rate of change* is the multiplication of *rate of change* functions.
 
 
 ### Backpropagation using PyTorch
 
+`PyTorch` records all *forward pass* information automatically for any data which has `.requires_grad` set to `True`. This can be done by providing `requires_grad=True` during initialization.
+
+Calling `.backward()` method of the predictor trigger the *backward pass*.
 ```python
 # import libraries
 import torch
 
 # data
 x = torch.tensor(2.0,requires_grad=True)
+x.requires_grad # True
 
 # forward pass
 y = hgf(x)
@@ -124,7 +134,9 @@ with tf.GradientTape() as tape:
 tape.gradient(y, x) 
 # <tf.Tensor: shape=(), dtype=float32, numpy=36.0>
 ```
+TensorFlow provides `tf.GradientTape()` to record all required information during the *forward pass*.
 
+To run the *backward pass* use the `gradient(prediction,input)` method of `tf.GradientTape()`.
 ### Backpropagation using mathematical notation
 
 Mathematically, the workhorse behind backpropagation is a *chain rule*. The name comes from the fact that the end result is actually chain of gradient multiplications:
@@ -139,7 +151,7 @@ $$g(x)=x^2$$
 
 $$h(x)=x+5$$
 
-and the respective derivatives:
+and the respective gradients:
 
 $$f'(x) = 3$$
 
@@ -156,7 +168,7 @@ Placing $x=2$ yields:
 $$h(g(f(2)))'=1*6x*3=18*x=36$$ 
 
 ## What's next?
-Actually, backpropagation refers only to the method for computing individual weight contributions (*gradients* mathematically). 
+Actually, backpropagation refers only to the method for computing individual weight contributions. 
 
 Further algorithms are needed to perform the actual weight adjustments. Among the most prominent are: *Stochastic Gradient Descent*, *Momentum*, *Adagrad* and *RMSProp*.
 
