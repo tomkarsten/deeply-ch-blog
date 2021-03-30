@@ -35,14 +35,20 @@ Sounds a bit more complicated than it is. To make the backpropagation algorithm 
 
 
 ![](backpropagation_comp_graph.png)
-Let's a with very simple data transformation $(3x)^2+5$ where the transformation of input $x$ can be visualized as a series of steps in a computational graph. The first step is multiplying input by 3: $3*x$, then applying $(..)^2$ and adding $5$ to the final result.
+Let's a with very simple data transformation $(3\cdot x)^2+5$ where the transformation of input $x$ can be visualized as a series of steps in a computational graph. The first step is multiplying input: $3\cdot x$, then applying $(..)^2$, and adding $5$ to the final result.
 
 ![](backpropagation_forward_pass1.png)
-To see the computational graph in motion we use data input $x=2$ as an example. Passing the input through to the end of the computational graph yields $41$.
+To see the computational graph in motion, we use data input $x=2$ as an example. Passing the input through our computational graph yields $41$. Simple? It is.
 ![](backpropagation_forward_pass2.png)
-Before we move on there is an additional step to. For every data transformation (in our case three in total) we save additional information about the *rate of change*. Rate of change is just another name for *how fast the outcome of an operation is responding to an unit of input*. Let's take an example: if the data transformation is $3x$, where $x$ is the input, then for every unit $x=1$ the change is: $3*1=3$. We keep this as additional information in our graph and move to the next step. The rate of change for $x^2$ is $2*x$ and for the last step $x+5$ it is just $1$. 
+
+Before we move on, there is an additional work to do. Note: depending on the implementation this additional step can be done later during the *backpropagation* phase. But here, we do it right now.
+
+So what is the additional step all about? For every data data input we want to save information how it affects the outcome of next operation. It is much simpler than it sounds. 
+
+Let's take an example: if the data operation is $3x$, where $x$ is the input, then for every unit $x=1$ the change is: $3\cdot 1=3$. We keep this as additional information in our graph and move to the next step. The rate of change for $x^2$ is $2\cdot x$ and for the last step $x+5$ it is just $1$. By the way, these operations have a name: *rate of change* or *gradient* if you are a mathematician.
+
 ![](backpropagation_backward_pass.png)
-Now, after being done with the *forward phase*, we run so called *backward pass* where all our previous efforts are starting bearing fruits. We begin backward pass with the last operation's *rate of change* and move up the graph by multiplying all intermediate results from the forward pass.
+Now, after being done with the *forward phase*, we run so called *backward pass* where all our previous efforts are starting bearing fruits. We begin backward pass with the last operation's *rate of change* and move up the graph by multiplying all intermediate results from the forward pass. That's it.
 
 ### Backpropagation using pseudocode
 
@@ -139,11 +145,25 @@ TensorFlow provides `tf.GradientTape()` to record all required information durin
 To run the *backward pass* use the `gradient(prediction,input)` method of `tf.GradientTape()`.
 ### Backpropagation using mathematical notation
 
-Mathematically, the workhorse behind backpropagation is a *chain rule*. The name comes from the fact that the end result is actually chain of gradient multiplications:
+Let's start with a simple case where we have just two functions $g(x)$ and $f(x)$. If applied one after another we have $g(f(x))$. The rule (also called *chain rule*) for calculating the gradient is:
 
-$$(h(g(f(x)))'=(h \circ g \circ f)(x)'=h'(g(f(x)))*g'(f(x))*f'(x)$$
+$$g(f(x))'=g'(f(x)) \cdot f(x)$$
 
-Four our example consider $h(g(f(x)))=(3x)^2+5$, which can be also decomposed as:
+If we have three functions applied one after another (as in our example above), the rule is:
+
+$$h(g(f(x)))'=h'(g(f(x))) \cdot g'(f(x)) \cdot f'(x)$$
+
+Four functions applied one after another? Easy:
+
+$$i(h(g(f(x))))'=i'(h(g(f(x)))) \cdot h'(g(f(x))) \cdot g'(f(x)) \cdot f'(x)$$
+
+You see the pattern? Good 👍! That's why it's called *chain rule*. Surprise, surprise. 
+
+Ok, now let's step back to our example with three functions. To make it easier to read $h(g(f(x)))'$ is often written as $(h \circ g \circ f)(x)'$, which is basically the same thing:
+$$h(g(f(x)))'=(h \circ g \circ f)(x)'=h'(g(f(x))) \cdot g'(f(x)) \cdot f'(x)$$
+
+
+So far about the rules for calculation. Now, continuing with our initial example, consider $(h \circ g \circ f)(x)=(3x)^2+5$, which can be also decomposed as:
 
 $$f(x) = 3x$$
 
@@ -151,7 +171,7 @@ $$g(x)=x^2$$
 
 $$h(x)=x+5$$
 
-and the respective gradients:
+and after calculating the respective gradients:
 
 $$f'(x) = 3$$
 
@@ -159,14 +179,22 @@ $$g'(x)=2x$$
 
 $$h'(x)=1$$
 
-Applying the chain rule yields:
+Replacing our rule for the gradient of three consecutive functions $h'(g(f(x)))*g'(f(x))*f'(x)$ with the intermediate calculations above yields:
+$$h'(g(f(x)))=1$$
 
-$$h(g(f(x)))'=1*6x*3=18x$$ 
+$$g'(f(x))=2 \cdot (3x)$$
 
-Placing $x=2$ yields:
+$$f'(x)=3$$
 
-$$h(g(f(2)))'=1*6x*3=18*x=36$$ 
+or if put together:
 
+$$(h \circ g \circ f)(x)'=1 \cdot2 \cdot (3x) \cdot 3=18x$$ 
+
+Placing as input $x=2$ from our initial example yields:
+
+$$(h \circ g \circ f)(2)'=18x=36$$ 
+
+Done. 
 ## What's next?
 Actually, backpropagation refers only to the method for computing individual weight contributions. 
 
