@@ -8,7 +8,9 @@ date: "2021-03-23"
 > “I have no special talents. I am only passionately curious.”
 ― Albert Einstein
 
-*Backpropagation* is of the key ingredients of almost any deep learning framework. Simply put, backpropagation allows to extract insights about the scale of contribution of each individual part of the model. What are the different parts? A typical *deep learning model* can be broken down into many layers, each performing some operation and containing many adjustable parameters (also called *weights*) to tune these operations. Weights are tuned during *training* to make the predictions matching the expected results. 
+*Backpropagation* is of the key ingredients of almost any deep learning framework. Simply put, backpropagation allows to extract insights about the scale of contribution of each individual part of the model. What are the different parts? 
+
+A typical *deep learning model* can be broken down into many layers, each performing some operation and containing many adjustable parameters (also called *weights*) to tune these operations. Weights are tuned during *training* to make the predictions matching the expected results. 
 
 ![](backpropagation_intro.png)
 
@@ -153,8 +155,9 @@ $$i(h(g(f(x))))'=i'(h(g(f(x)))) \cdot h'(g(f(x))) \cdot g'(f(x)) \cdot f'(x)$$
 
 You see the pattern? Good 👍! That's why it's called *chain rule*. Surprise, surprise. 
 
-Ok, now let's step back to our example with three functions. One further note before we continue. To save ink and make it easier to read $h(g(f(x)))'$ is often written as $(h \circ g \circ f)(x)'$:
-$$h(g(f(x)))'=(h \circ g \circ f)(x)'=h'(g(f(x))) \cdot g'(f(x)) \cdot f'(x)$$
+Ok, now let's step back to our example with three functions. One further note before we continue. To save ink and make it easier to read $h(g(f(x)))'$ is often written as $(h \circ g \circ f)(x)$:
+
+$$(h \circ g \circ f)'(x)=h'(g(f(x))) \cdot g'(f(x)) \cdot f'(x)$$
 
 
 Now, continuing with our initial example, consider $(h \circ g \circ f)(x)=(3x)^2+5$, which can be also decomposed as:
@@ -173,7 +176,7 @@ $$g'(x)=2x$$
 
 $$h'(x)=1$$
 
-Replacing our rule for the gradient of three consecutive functions $h'(g(f(x)))*g'(f(x))*f'(x)$ with the intermediate calculations above yields:
+Placing intermediate calculations above into $h'(g(f(x))) \cdot g'(f(x)) \cdot f'(x)$ yields:
 
 $$h'(g(f(x)))=1$$
 
@@ -181,11 +184,11 @@ $$g'(f(x))=2 \cdot (3x)$$
 
 $$f'(x)=3$$
 
-or if put together:
+or if we put further together:
 
 $$(h \circ g \circ f)(x)'=1 \cdot2 \cdot (3x) \cdot 3=18x$$ 
 
-Placing as input $x=2$ from our initial example yields:
+Finally, placing as input $x=2$ from our initial example yields:
 
 $$(h \circ g \circ f)(2)'=18x=36$$ 
 
