@@ -1,47 +1,40 @@
 ---
-title: Deep Learning Fundamentals - How Backpropagation Works 
+title: How Backpropagation Works 
 tags: ["deep learning"]
 date: "2021-03-23"
 ---
 ![](backpropagatin-cover.png)
 
-
 > “I have no special talents. I am only passionately curious.”
 ― Albert Einstein
 
-
-A typical *deep learning model* consists of many layers, each containing many adjustable parameters (also called *weights*). From the deep learning perspective the outcomes or *predictions* are nothing more than a sequence of *data transformations*. 
+*Backpropagation* is of the key ingredients of almost any deep learning framework. Simply put, backpropagation allows to extract insights about the scale of contribution of each individual part of the model. What are the different parts? A typical *deep learning model* can be broken down into many layers, each performing some operation and containing many adjustable parameters (also called *weights*) to tune these operations. Weights are tuned during *training* to make the predictions matching the expected results. 
 
 ![](backpropagation_intro.png)
 
-During the training phase each data transformation (or to be more precise its weights) are tuned to make more accurate predictions. 
-
 **But how to tune these weights and by how much?** This question remained for a long time unanswered until Rumelhart, Hinton & Williams made a revolutionary breakthrough with the *Backpropagation algorithm*.
 
-Simply put, backpropagation allows efficient computation of prediction contribution for each individual weight. Without knowing who contributes and how much it is nearly impossible to adjust weights and to *learn* how to make better predictions.
 
-At its core, the backpropagation consists of following three steps:
+At its core, backpropagation algorithm consists of following three steps:
 1. take data input and calculate forward through the layers (Note: typically, the last layer is special as it calculates the error, see *how to learn from data*),
 2. on the way down in the computational graph calculate rate of change (*gradients*) for each operation, then
 3. run from the end of the graph up and calculate individual weight contribution using forward pass results (*backward pass*).
 
-Sounds a bit more complicated than it is. To make the backpropagation algorithm stick, we go a bit further and consider an example from several perspectives by: 
-* introducing step-by-step visualization,
-* implementing it in pseudocode, then
+Sounds a bit more complicated than it is. To make the backpropagation algorithm stick, we consider an example from a few perspectives: 
+* first, by introducing step-by-step visualization, then
+* implementing it in pseudocode, 
 * implementing concise versions using `PyTorch` and `TensorFlow` deep learning frameworks, and last but not least, 
 * providing mathematical symbolic notation for all the steps above.
-
 ### Backpropagation visualized
 
-
 ![](backpropagation_comp_graph.png)
-Let's a with very simple data transformation $(3\cdot x)^2+5$ where the transformation of input $x$ can be visualized as a series of steps in a computational graph. The first step is multiplying input: $3\cdot x$, then applying $(..)^2$, and adding $5$ to the final result.
+Let's start with a very simple data transformation $(3\cdot x)^2+5$ where the consecutive transformation of input $x$ can be visualized as a series of data transformation steps in a computational graph. The first step is multiplying input: $3\cdot x$, then applying $(..)^2$, and adding $5$ to the final result.
 
 ![](backpropagation_forward_pass1.png)
-To see the computational graph in motion, we use data input $x=2$ as an example. Passing the input through our computational graph yields $41$. Simple? It is.
+To see the computational graph in motion, we pick $x=2$ as an example. Passing input through our computational graph yields $41$. Simple? It is.
 ![](backpropagation_forward_pass2.png)
 
-Before we move on, there is an additional work to do. Note: depending on the implementation this additional step can be done later during the *backpropagation* phase. But here, we do it right now.
+But before we move on, there is some additional work to do. Note: depending on the implementation this additional step can be done later during the *backpropagation* phase. But here, we do it right now.
 
 So what is the additional step all about? For every data data input we want to save information how it affects the outcome of next operation. It is much simpler than it sounds. 
 
@@ -75,7 +68,7 @@ def hgf(x):
 Next, we stack individual functions into one function.
 
 ```python
-# define derivatives for each individual function
+# define gradients for each individual function
 def grad_f(x):
     return 3
 
@@ -89,7 +82,7 @@ def grad_h(x):
 Each individual function has a shadow *rate of change* function. 
 
 ```python
-# define derivatives for the compsite function
+# define gradient for the compsite function
 def grad_hgf(x):
     x1 = f(x)
     x2 = g(x1)
@@ -125,6 +118,10 @@ x.grad
 
 ### Backpropagation using TensorFlow
 
+TensorFlow provides `tf.GradientTape()` to record all required information during the *forward pass*.
+
+To run the *backward pass* use the `gradient(prediction,input)` method of `tf.GradientTape()`.
+
 ```python
 # import libraries
 import tensorflow as tf
@@ -140,14 +137,11 @@ with tf.GradientTape() as tape:
 tape.gradient(y, x) 
 # <tf.Tensor: shape=(), dtype=float32, numpy=36.0>
 ```
-TensorFlow provides `tf.GradientTape()` to record all required information during the *forward pass*.
-
-To run the *backward pass* use the `gradient(prediction,input)` method of `tf.GradientTape()`.
 ### Backpropagation using mathematical notation
 
-Let's start with a simple case where we have just two functions $g(x)$ and $f(x)$. If applied one after another we have $g(f(x))$. The rule (also called *chain rule*) for calculating the gradient is:
+Let's start with a simple case where we have just two functions $g(x)$ and $f(x)$. If applied one after another we have $g(f(x))$. The rule for calculating the gradient is:
 
-$$g(f(x))'=g'(f(x)) \cdot f(x)$$
+$$g(f(x))'=g'(f(x)) \cdot f'(x)$$
 
 If we have three functions applied one after another (as in our example above), the rule is:
 
@@ -159,11 +153,11 @@ $$i(h(g(f(x))))'=i'(h(g(f(x)))) \cdot h'(g(f(x))) \cdot g'(f(x)) \cdot f'(x)$$
 
 You see the pattern? Good 👍! That's why it's called *chain rule*. Surprise, surprise. 
 
-Ok, now let's step back to our example with three functions. To make it easier to read $h(g(f(x)))'$ is often written as $(h \circ g \circ f)(x)'$, which is basically the same thing:
+Ok, now let's step back to our example with three functions. One further note before we continue. To save ink and make it easier to read $h(g(f(x)))'$ is often written as $(h \circ g \circ f)(x)'$:
 $$h(g(f(x)))'=(h \circ g \circ f)(x)'=h'(g(f(x))) \cdot g'(f(x)) \cdot f'(x)$$
 
 
-So far about the rules for calculation. Now, continuing with our initial example, consider $(h \circ g \circ f)(x)=(3x)^2+5$, which can be also decomposed as:
+Now, continuing with our initial example, consider $(h \circ g \circ f)(x)=(3x)^2+5$, which can be also decomposed as:
 
 $$f(x) = 3x$$
 
@@ -180,6 +174,7 @@ $$g'(x)=2x$$
 $$h'(x)=1$$
 
 Replacing our rule for the gradient of three consecutive functions $h'(g(f(x)))*g'(f(x))*f'(x)$ with the intermediate calculations above yields:
+
 $$h'(g(f(x)))=1$$
 
 $$g'(f(x))=2 \cdot (3x)$$
